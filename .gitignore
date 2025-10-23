@@ -1,0 +1,5 @@
+test/
+train/
+**.pth
+**.pt
+**.safetensors
