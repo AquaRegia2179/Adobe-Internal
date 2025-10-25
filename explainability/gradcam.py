@@ -1,13 +1,13 @@
 import torch
 import numpy as np
-from pytorch_grad_cam import GradCAM
+from pytorch_grad_cam import GradCAMPlusPlus
 from pytorch_grad_cam.utils.image import show_cam_on_image
 
 
 def get_gradcam_heatmap(model, input_tensor, target_layer):
     device = next(model.parameters()).device  
 
-    cam = GradCAM(model=model, target_layers=[target_layer])
+    cam = GradCAMPlusPlus(model=model, target_layers=[target_layer])
 
     input_tensor = input_tensor.to(device)
 

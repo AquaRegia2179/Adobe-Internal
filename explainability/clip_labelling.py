@@ -47,16 +47,36 @@ class CLIPArtifactDetector:
     
 
     def classify_artifacts(self, roi, top_k=3):
-        #Debugging step, don't mind
-        if isinstance(roi, np.ndarray):
-            roi = cv2.cvtColor(roi, cv2.COLOR_BGR2RGB)
-            roi = Image.fromarray(roi)
+        try:
+            if isinstance(roi, np.ndarray):
+                roi = cv2.cvtColor(roi, cv2.COLOR_BGR2RGB)
+                roi = Image.fromarray(roi)
 
-        inputs = self.processor(images=roi, return_tensors="pt", do_rescale=True)
+            inputs = self.processor(images=roi, return_tensors="pt")
+            inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
-        inputs = {k: v.to(self.device) for k, v in inputs.items()}
+            with torch.inference_mode():
+                image_features = self.model.get_image_features(**inputs)
+                image_features = image_features / image_features.norm(dim=-1, keepdim=True)
 
-        with torch.no_grad():
-            image_features = self.model.get_image_features(**inputs)
-            image_features = image_features / image_features.norm(dim=-1, keepdim=True)
+                text_inputs = self.processor(
+                    text=self.artifact_texts, return_tensors="pt", padding=True
+                )
+                text_inputs = {k: v.to(self.device) for k, v in text_inputs.items()}
+                text_features = self.model.get_text_features(**text_inputs)
+                text_features = text_features / text_features.norm(dim=-1, keepdim=True)
 
+                similarity = (image_features @ text_features.T).squeeze(0)  
+                probs = torch.softmax(similarity, dim=0)
+
+                top_probs, top_indices = probs.topk(top_k)
+                results = [
+                    (self.artifact_texts[i], float(top_probs[j].item()))
+                    for j, i in enumerate(top_indices)
+                ]
+
+                return results
+
+        except Exception as e:
+            print(f"Error in classify_artifacts: {e}")
+            return [] 
