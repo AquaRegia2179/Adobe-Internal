@@ -3,3 +3,6 @@ env
 __pycache__
 weights
 test_bench
+test/
+train/
+vit/
