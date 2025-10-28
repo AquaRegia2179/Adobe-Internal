@@ -88,7 +88,12 @@ def run_analysis_pipeline(pil_image, model, device, clip_detector):
     tensor = transform(img_resized_pil).unsqueeze(0).to(device)
 
     # 2. TASK 1: AI IMAGE DETECTION
-    class_names = ["Real", "AI-Generated"] # Assuming 0: Real, 1: AI
+    
+    # --- THIS IS THE FIX ---
+    # We've inverted the class names to match your model's output
+    # This assumes 0 = AI-Generated, 1 = Real
+    class_names = ["AI-Generated", "Real"] 
+    
     prediction_label = "Error"
     confidence_percent = 0.0
     
@@ -97,6 +102,7 @@ def run_analysis_pipeline(pil_image, model, device, clip_detector):
         probabilities = torch.softmax(logits, dim=1)
         confidence, predicted_class = torch.max(probabilities, 1)
         
+        # This line now correctly maps the index to the label
         prediction_label = class_names[predicted_class.item()]
         confidence_percent = confidence.item() * 100
 
@@ -150,16 +156,14 @@ def draw_home_page():
     # Real vs. Fake image placeholders
     col1, col2 = st.columns(2)
     with col1:
-        # --- FIX: Added 'https://' ---
         st.image(
             "./images/real.png", 
             caption="A real photograph.", 
             use_container_width=True
         )
     with col2:
-        # --- FIX: Added 'https://' ---
         st.image(
-            "./images/Fake.png", 
+            "./images/fake.png", 
             caption="An AI-generated image with subtle flaws.", 
             use_container_width=True
         )
@@ -233,6 +237,7 @@ def draw_app_page():
                     st.markdown("---")
                     st.header("TASK 1: AI IMAGE DETECTION")
                     
+                    # This logic is now correct because the 'prediction' variable is correct
                     if prediction == "AI-Generated":
                         st.error(f"**Prediction: AI-Generated**")
                     else:
@@ -241,6 +246,7 @@ def draw_app_page():
                     st.metric(label="Model Confidence", value=f"{confidence:.2f}%")
                     
                     # --- TASK 2: EXPLANATION WORKFLOW ---
+                    # This conditional check also works correctly now
                     if prediction == "AI-Generated":
                         st.markdown("---")
                         st.header("TASK 2: EXPLANATION WORKFLOW")
