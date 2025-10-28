@@ -8,22 +8,47 @@ import cv2 as cv2
 #TODO:
 #   Update the list of artifact candidates
 ARTIFACT_CANDIDATES = [
-    "deformed hands with extra fingers",
-    "mangled hands with fused fingers",
-    "six fingers on one hand",
-    "asymmetrical eyes or mismatched pupils",
-    "unnatural or waxy skin texture",
-    "plastic-looking skin",
-    "blurry or distorted face",
-    "garbled or unnatural teeth",
-    "mismatched or poorly formed ears",
-    "illogical body parts or extra limbs",
-    "garbled or unreadable text",
-    "nonsense writing or symbols",
-    "warped or distorted letters",
-    "a strange repeating pattern",
-    "an unnatural moiré pattern",
-    "smeary or watery texture",
+
+    # Patterns & textures
+    "unnatural moiré patterns",
+    "repeating textures",
+    "tiled textures",
+    "inconsistent surface patterns",
+    "glitch-like artifacts",
+    "smearing textures",
+    "bleeding textures",
+    "watery textures",
+    "jagged edges",
+
+    # Lighting & rendering
+    "inconsistent lighting",
+    "impossible shadows",
+    "overexposed regions",
+    "underexposed regions",
+    "unnatural reflections",
+    "strange highlights",
+    "unnatural color bleeding",
+    "unrealistic specular spots",
+
+    # Perspective & geometry
+    "warped perspective",
+    "impossible perspectives",
+    "stretched objects",
+    "compressed objects",
+    "unrealistic depth cues",
+    "inconsistent scale",
+    "objects intersecting impossibly",
+    "floating elements",
+    "disconnected elements",
+
+    # Miscellaneous visual glitches
+    "ghosting",
+    "double exposure artifacts",
+    "weird blending between layers",
+    "object fusion errors",
+    "abrupt texture transitions",
+    "edge tearing"
+
 ]
 
 
