@@ -137,7 +137,7 @@ Adobe-Internal/
 - **Daksh Singhal**
 - **Hemant Nagar**
 - **Abhay Mishra**
-- **Anag Mahipal**
+- **Anurag Mahipal**
 
 
 ## Hackathon Context
